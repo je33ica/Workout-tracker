@@ -28,7 +28,7 @@ var workoutSchema = new Schema({
       },
       weight: {
         type: Number,
-        min: 1,
+        min: 0,
         max: 1000,
       },
       reps: {
@@ -49,3 +49,7 @@ var workoutSchema = new Schema({
     },
   ],
 });
+
+var Workout = mongoose.model("Workout", workoutSchema);
+
+module.exports = Workout;
