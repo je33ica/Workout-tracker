@@ -15,6 +15,7 @@ router.get("/api/workouts", (req, res) => {
 
 //addExercise  method: "PUT",
 router.put("/api/workouts/:id", ({ body, params }, res) => {
+  console.log("response in api", { body, params });
   db.Workout.findByIdAndUpdate(
     params.id,
     { $push: { exercise: body } },
@@ -49,7 +50,7 @@ router.post("/api/workouts", (req, res) => {
 router.get("/api/workouts/range", (req, res) => {
   db.Workout.find({})
     //should return the last 10 entries in descending date order
-    .sort({ date: -1 })
+    // .sort({ date: -1 })
     .limit(10)
     .then((dbWorkouts) => {
       res.json(dbWorkouts);
