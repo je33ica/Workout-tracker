@@ -1,11 +1,20 @@
 const router = require("express").Router();
-const db = require("../models");
+const db = require("../models/index");
 //psuedo code for api routes to create that correspond with api.js in public
 
 //getLastWorkout
 router.get("/api/workouts", (req, res) => {
-  db.Workout.find({})
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: "$exercises.duration",
+        },
+      },
+    },
+  ])
     .then((dbWorkouts) => {
+      console.log("workouts duration", dbWorkouts);
       res.json(dbWorkouts);
     })
     .catch((err) => {
@@ -15,9 +24,10 @@ router.get("/api/workouts", (req, res) => {
 
 //addExercise  method: "PUT",
 router.put("/api/workouts/:id", ({ body, params }, res) => {
+  console.log("response in api", { body, params });
   db.Workout.findByIdAndUpdate(
     params.id,
-    { $push: { exercise: body } },
+    { $push: { exercises: body } },
     //findByIdAndUpdate(), etc. new option is now false by default.
     //The MongoDB server assumes false by default, this change is so
     // mongoose is more consistent with the server's API.
@@ -47,10 +57,18 @@ router.post("/api/workouts", (req, res) => {
 //WHAT IS THE RANGE IM GETTING ?
 //getWorkoutsInRange
 router.get("/api/workouts/range", (req, res) => {
-  db.Workout.find({})
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: "$exercises.duration",
+        },
+      },
+    },
+  ])
     //should return the last 10 entries in descending date order
-    .sort({ date: -1 })
-    .limit(10)
+    // .sort({ date: -1 })
+    .limit(7)
     .then((dbWorkouts) => {
       res.json(dbWorkouts);
     })
@@ -58,4 +76,5 @@ router.get("/api/workouts/range", (req, res) => {
       res.json(err);
     });
 });
+
 module.exports = router;
