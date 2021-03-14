@@ -1,5 +1,6 @@
+ # Workout tracker
  :calendar: Workout tracker :sweat_drops: :muscle:
-   # This README has been licensed using :
+   ## This README has been licensed using :
    [![License Badge](https://img.shields.io/static/v1?label=License&message=Unlicense&color=blue)]
     
 # Author: Jessica
